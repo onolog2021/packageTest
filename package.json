@@ -101,7 +101,8 @@
     "electron-updater": "^6.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.16.0"
+    "react-router-dom": "^6.16.0",
+    "update-electron-app": "^2.0.1"
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",
@@ -123,6 +124,7 @@
     "browserslist-config-erb": "^0.0.3",
     "chalk": "^4.1.2",
     "concurrently": "^8.2.1",
+    "copyfiles": "^2.4.1",
     "core-js": "^3.32.2",
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
@@ -171,8 +173,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "packageTest",
+    "appId": "org.erb.packageTest",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -226,12 +228,13 @@
       "output": "release/build"
     },
     "extraResources": [
-      "./assets/**"
+      "./assets/**",
+      "editor.db.sql"
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "onolog2021",
+      "repo": "packageTest"
     }
   },
   "collective": {

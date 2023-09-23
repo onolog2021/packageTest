@@ -9,6 +9,8 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
+import fs from 'fs';
+import sqlite3 from 'sqlite3';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -42,6 +44,22 @@ const isDebug =
 if (isDebug) {
   require('electron-debug')();
 }
+
+// packageしたときfolderの一番上の階層はresourses下に置かれる
+// resorsesにおかれるはず
+const userPath = app.isPackaged ? app.getPath('userData') : app.getAppPath();
+const dbPath = path.join(userPath, './resourses')
+
+ipcMain.handle('check', (event) => {
+  return dbPath;
+})
+
+// if (!fs.existsSync(dbPath)) {
+//   // asar下
+//   const sqlFilePath = isDebug ? path.resolve(userPath, './editor.db.sql') : path.resolve(userPath, '../editor.db.sql');
+//   const db = new sqlite3.Database(dbPath);
+//   executeSql(sqlFilePath, db);
+// }
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
@@ -135,3 +153,18 @@ app
     });
   })
   .catch(console.log);
+
+    // 外部SQLの実行
+function executeSql(sqlFilePath, db) {
+  fs.readFile(sqlFilePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('SQLファイルの読み込みエラー:', err);
+      return;
+    }
+    db.exec(data, (err) => {
+      if (err) {
+        console.error('SQLの実行エラー:', err);
+      }
+    });
+  });
+}
